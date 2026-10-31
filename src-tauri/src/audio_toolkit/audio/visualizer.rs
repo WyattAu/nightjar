@@ -1,5 +1,5 @@
-use rustfft::{num_complex::Complex32, Fft, FftPlanner};
-use std::sync::Arc;
+use dsp_core::fft::RealFft;
+use dsp_core::window::{Window, WindowKind};
 
 // `db` below is not true dBFS: it's a per-bin average divided by the FFT
 // window size, which lands ~20 dB low for speech. So this window is calibrated
@@ -13,10 +13,11 @@ const GAIN: f32 = 1.3;
 const CURVE_POWER: f32 = 0.7;
 
 pub struct AudioVisualiser {
-    fft: Arc<dyn Fft<f32>>,
-    window: Vec<f32>,
+    fft: RealFft,
+    window: Window,
     bucket_ranges: Vec<(usize, usize)>,
-    fft_input: Vec<Complex32>,
+    real: Vec<f64>,
+    spectrum: Vec<f64>,
     noise_floor: Vec<f32>,
     buffer: Vec<f32>,
     window_size: usize,
@@ -31,15 +32,10 @@ impl AudioVisualiser {
         freq_min: f32,
         freq_max: f32,
     ) -> Self {
-        let mut planner = FftPlanner::<f32>::new();
-        let fft = planner.plan_fft_forward(window_size);
-
-        // Pre-compute Hann window
-        let window: Vec<f32> = (0..window_size)
-            .map(|i| {
-                0.5 * (1.0 - (2.0 * std::f32::consts::PI * i as f32 / window_size as f32).cos())
-            })
-            .collect();
+        let fft = RealFft::new(window_size)
+            .expect("visualiser window size must be a power of two >= 4");
+        let window = Window::new(WindowKind::Hann, window_size, true, 0.0)
+            .expect("hann window construction cannot fail for a valid length");
 
         // Pre-compute bucket frequency ranges
         let nyquist = sample_rate as f32 / 2.0;
@@ -72,10 +68,11 @@ impl AudioVisualiser {
         }
 
         Self {
+            spectrum: vec![0.0; fft.spectrum_len()],
+            real: vec![0.0; fft.real_len()],
             fft,
             window,
             bucket_ranges,
-            fft_input: vec![Complex32::new(0.0, 0.0); window_size],
             noise_floor: vec![-40.0; buckets], // Initialize to reasonable noise floor
             buffer: Vec::with_capacity(window_size * 2),
             window_size,
@@ -98,31 +95,34 @@ impl AudioVisualiser {
         // Remove DC component
         let mean = window_samples.iter().sum::<f32>() / self.window_size as f32;
 
-        // Apply window function and prepare FFT input
+        // Apply window function and prepare real-FFT input (f64: dsp-core's
+        // allocation-free path; bucket output is f32, as before)
         for (i, &sample) in window_samples.iter().enumerate() {
-            let windowed_sample = (sample - mean) * self.window[i];
-            self.fft_input[i] = Complex32::new(windowed_sample, 0.0);
+            let windowed_sample = (sample - mean) * self.window.as_slice()[i] as f32;
+            self.real[i] = windowed_sample as f64;
         }
 
-        // Perform FFT
-        self.fft.process(&mut self.fft_input);
+        // Perform FFT (spectrum: N/2 + 1 bins, interleaved re/im)
+        self.fft
+            .forward(&mut self.real, &mut self.spectrum)
+            .expect("dsp-core forward with pre-sized buffers");
 
         // Compute power spectrum and bucket levels
         let mut buckets = vec![0.0; self.buckets];
 
         for (bucket_idx, &(start_bin, end_bin)) in self.bucket_ranges.iter().enumerate() {
-            if start_bin >= end_bin || end_bin > self.fft_input.len() / 2 {
+            if start_bin >= end_bin || end_bin > self.spectrum.len() / 2 {
                 continue;
             }
 
             // Calculate average power in this frequency range
-            let mut power_sum = 0.0;
+            let mut power_sum = 0.0f64;
             for bin_idx in start_bin..end_bin {
-                let magnitude = self.fft_input[bin_idx].norm();
-                power_sum += magnitude * magnitude;
+                let (re, im) = (self.spectrum[2 * bin_idx], self.spectrum[2 * bin_idx + 1]);
+                power_sum += re * re + im * im;
             }
 
-            let avg_power = power_sum / (end_bin - start_bin) as f32;
+            let avg_power = (power_sum / (end_bin - start_bin) as f64) as f32;
 
             // Convert to dB with proper scaling
             let db = if avg_power > 1e-12 {
