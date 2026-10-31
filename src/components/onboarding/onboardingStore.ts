@@ -41,7 +41,7 @@ interface Persisted {
   lessons: { hold: boolean; tap: boolean };
   /** Set when All set's panel jumps back to a screen; continuing returns here. */
   returnTo: OnboardingStep | null;
-  /** Start Handy at login: set on All set, saved when they finish. */
+  /** Start Nightjar at login: set on All set, saved when they finish. */
   atLogin: boolean;
 }
 

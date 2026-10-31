@@ -159,14 +159,14 @@ impl HistoryManager {
         Ok(())
     }
 
-    /// Bring the schema up to date. A newer Handy's database opens as is:
+    /// Bring the schema up to date. A newer Nightjar's database opens as is:
     /// migrations only add columns, and every query names its columns.
     fn apply_migrations(conn: &mut Connection) -> Result<()> {
         match Migrations::new(MIGRATIONS.to_vec()).to_latest(conn) {
             Err(rusqlite_migration::Error::MigrationDefinition(
                 MigrationDefinitionError::DatabaseTooFarAhead,
             )) => {
-                warn!("history.db is from a newer version of Handy; opening it without migrating")
+                warn!("history.db is from a newer version of Nightjar; opening it without migrating")
             }
             other => other?,
         }

@@ -1,5 +1,5 @@
 //! Which language a transcription runs in. Ported from `autoLanguagePolicy`
-//! in `@handy-computer/models`, plus Handy's single-language and Always rules.
+//! in `@handy-computer/models`, plus Nightjar's single-language and Always rules.
 
 use serde::Serialize;
 use specta::Type;
@@ -28,7 +28,7 @@ pub enum Plan {
     },
     /// The model's own detection.
     Native,
-    /// Handy's detector chooses between `languages` (the model's codes, in
+    /// Nightjar's detector chooses between `languages` (the model's codes, in
     /// preference order); `allowed` holds the detector's label for each.
     Detect {
         languages: Vec<String>,
@@ -103,7 +103,7 @@ fn is_multilingual(languages: &[String]) -> bool {
         .any(|l| canonical_language_code(l) != canonical_language_code(&languages[0]))
 }
 
-/// Whether Auto on this model needs Handy's detector, whatever the person
+/// Whether Auto on this model needs Nightjar's detector, whatever the person
 /// speaks (`requiresLanguageDetector`).
 pub fn requires_language_detector(model: &ModelLanguages) -> bool {
     !model.detects && is_multilingual(model.languages)
@@ -237,9 +237,9 @@ pub fn plan(
 pub enum LanguageStatus {
     /// The language they picked.
     Selected { language: String },
-    /// Decided per transcription: the model's own detection, or Handy's.
+    /// Decided per transcription: the model's own detection, or Nightjar's.
     Auto,
-    /// Auto needs Handy's detector, which isn't downloaded; `fallback` (the
+    /// Auto needs Nightjar's detector, which isn't downloaded; `fallback` (the
     /// first preferred language) is used until it is.
     DetectorMissing { fallback: String },
     /// Auto can't work here; `language` is used instead.

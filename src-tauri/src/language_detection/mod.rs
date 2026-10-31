@@ -1,4 +1,4 @@
-//! Spoken-language detection for Auto: Handy's detector picks between the
+//! Spoken-language detection for Auto: Nightjar's detector picks between the
 //! person's languages for models that can't detect the language themselves
 //! (and, in Always mode, for those that can). It never blocks a transcription.
 
@@ -81,9 +81,9 @@ pub enum LanguageSource {
     Selected,
     /// The model decides: its own detection, or its only language.
     Model,
-    /// Handy's detector picked it.
+    /// Nightjar's detector picked it.
     Detected,
-    /// Handy had to pick without detecting (too little speech, detection
+    /// Nightjar had to pick without detecting (too little speech, detection
     /// failed or unavailable, or Auto can't work for these languages).
     Fallback,
 }
@@ -100,7 +100,7 @@ impl LanguageSource {
     }
 
     /// Reads [`as_str`](Self::as_str); `None` for anything else (a newer
-    /// Handy's value).
+    /// Nightjar's value).
     pub fn parse(value: &str) -> Option<Self> {
         [Self::Selected, Self::Model, Self::Detected, Self::Fallback]
             .into_iter()

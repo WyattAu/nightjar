@@ -1,4 +1,4 @@
-//! Handy-keys based keyboard shortcut implementation
+//! Nightjar-keys based keyboard shortcut implementation
 //!
 //! This module provides an alternative to Tauri's global-shortcut plugin
 //! using the handy-keys library for more control over keyboard events.
@@ -57,7 +57,7 @@ enum ManagerCommand {
 }
 
 /// State for the handy-keys shortcut manager
-pub struct HandyKeysState {
+pub struct NightjarKeysState {
     /// Channel to send commands to the manager thread (wrapped in Mutex for Sync)
     command_sender: Mutex<Sender<ManagerCommand>>,
     /// Handle to the manager thread (wrapped in Mutex for Sync, allows proper join on drop)
@@ -85,8 +85,8 @@ pub struct FrontendKeyEvent {
     pub hotkey_string: String,
 }
 
-impl HandyKeysState {
-    /// Create a new HandyKeysState
+impl NightjarKeysState {
+    /// Create a new NightjarKeysState
     pub fn new(app: AppHandle) -> Result<Self, String> {
         let (cmd_tx, cmd_rx) = mpsc::channel::<ManagerCommand>();
 
@@ -302,7 +302,7 @@ impl HandyKeysState {
     fn recording_loop(app: AppHandle, running: Arc<AtomicBool>) {
         while running.load(Ordering::SeqCst) {
             let event = {
-                let state = match app.try_state::<HandyKeysState>() {
+                let state = match app.try_state::<NightjarKeysState>() {
                     Some(s) => s,
                     None => break,
                 };
@@ -359,7 +359,7 @@ impl HandyKeysState {
     }
 }
 
-impl Drop for HandyKeysState {
+impl Drop for NightjarKeysState {
     fn drop(&mut self) {
         // Signal recording to stop
         self.recording_running.store(false, Ordering::SeqCst);
@@ -408,22 +408,22 @@ fn modifiers_to_strings(modifiers: handy_keys::Modifiers) -> Vec<String> {
     result
 }
 
-/// Validate a shortcut string for the HandyKeys implementation.
-/// HandyKeys is more permissive: allows modifier-only combos and the fn key.
+/// Validate a shortcut string for the NightjarKeys implementation.
+/// NightjarKeys is more permissive: allows modifier-only combos and the fn key.
 pub fn validate_shortcut(raw: &str) -> Result<(), String> {
     if raw.trim().is_empty() {
         return Err("Shortcut cannot be empty".into());
     }
-    // HandyKeys accepts modifier-only, key-only, and modifier+key combos
+    // NightjarKeys accepts modifier-only, key-only, and modifier+key combos
     // Just verify the string is parseable
     raw.parse::<Hotkey>()
         .map(|_| ())
-        .map_err(|e| format!("Invalid shortcut for HandyKeys: {}", e))
+        .map_err(|e| format!("Invalid shortcut for NightjarKeys: {}", e))
 }
 
 /// Initialize handy-keys shortcuts
 pub fn init_shortcuts(app: &AppHandle) -> Result<(), String> {
-    let state = HandyKeysState::new(app.clone())?;
+    let state = NightjarKeysState::new(app.clone())?;
 
     let default_bindings = settings::get_default_settings().bindings;
     let user_settings = settings::load_or_create_app_settings(app);
@@ -460,16 +460,16 @@ pub fn init_shortcuts(app: &AppHandle) -> Result<(), String> {
 /// Register a shortcut
 pub fn register_shortcut(app: &AppHandle, binding: ShortcutBinding) -> Result<(), String> {
     let state = app
-        .try_state::<HandyKeysState>()
-        .ok_or("HandyKeysState not initialized")?;
+        .try_state::<NightjarKeysState>()
+        .ok_or("NightjarKeysState not initialized")?;
     state.register(&binding)
 }
 
 /// Unregister a shortcut
 pub fn unregister_shortcut(app: &AppHandle, binding: ShortcutBinding) -> Result<(), String> {
     let state = app
-        .try_state::<HandyKeysState>()
-        .ok_or("HandyKeysState not initialized")?;
+        .try_state::<NightjarKeysState>()
+        .ok_or("NightjarKeysState not initialized")?;
     state.unregister(&binding)
 }
 
@@ -478,7 +478,7 @@ pub fn unregister_shortcut(app: &AppHandle, binding: ShortcutBinding) -> Result<
 #[specta::specta]
 pub fn start_handy_keys_recording(app: AppHandle, binding_id: String) -> Result<(), String> {
     let settings = get_settings(&app);
-    if settings.keyboard_implementation != settings::KeyboardImplementation::HandyKeys {
+    if settings.keyboard_implementation != settings::KeyboardImplementation::NightjarKeys {
         return Err("handy-keys is not the active keyboard implementation".into());
     }
 
@@ -493,8 +493,8 @@ pub fn start_handy_keys_recording(app: AppHandle, binding_id: String) -> Result<
     }
 
     let state = app
-        .try_state::<HandyKeysState>()
-        .ok_or("HandyKeysState not initialized")?;
+        .try_state::<NightjarKeysState>()
+        .ok_or("NightjarKeysState not initialized")?;
 
     // Suspend every registered shortcut so a combo that overlaps an existing
     // binding can't fire it (or have its keys swallowed) mid-capture.
@@ -512,13 +512,13 @@ pub fn start_handy_keys_recording(app: AppHandle, binding_id: String) -> Result<
 #[specta::specta]
 pub fn stop_handy_keys_recording(app: AppHandle) -> Result<(), String> {
     let settings = get_settings(&app);
-    if settings.keyboard_implementation != settings::KeyboardImplementation::HandyKeys {
+    if settings.keyboard_implementation != settings::KeyboardImplementation::NightjarKeys {
         return Err("handy-keys is not the active keyboard implementation".into());
     }
 
     let state = app
-        .try_state::<HandyKeysState>()
-        .ok_or("HandyKeysState not initialized")?;
+        .try_state::<NightjarKeysState>()
+        .ok_or("NightjarKeysState not initialized")?;
 
     // Restore shortcuts from settings regardless of how recording ended.
     // A commit has already registered the new binding via change_binding;

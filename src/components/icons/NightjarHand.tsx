@@ -1,4 +1,4 @@
-const HandyHand = ({
+const NightjarHand = ({
   width,
   height,
 }: {
@@ -23,4 +23,4 @@ const HandyHand = ({
   </svg>
 );
 
-export default HandyHand;
+export default NightjarHand;

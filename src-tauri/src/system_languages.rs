@@ -17,7 +17,7 @@ struct Read {
     problem: Option<String>,
 }
 
-/// Read once: they rarely change while Handy runs.
+/// Read once: they rarely change while Nightjar runs.
 static READ: Lazy<Read> = Lazy::new(read);
 
 /// The OS's preferred languages, most preferred first, as BCP-47 tags

@@ -1,4 +1,4 @@
-const HandyTextLogo = ({
+const NightjarTextLogo = ({
   width,
   height,
   className,
@@ -86,4 +86,4 @@ const HandyTextLogo = ({
   );
 };
 
-export default HandyTextLogo;
+export default NightjarTextLogo;

@@ -1,4 +1,4 @@
-//! The spoken-language detector model, loaded in Handy's process on CPU (like
+//! The spoken-language detector model, loaded in Nightjar's process on CPU (like
 //! Silero VAD) when first needed and unloaded with the transcription model.
 
 use anyhow::Result;

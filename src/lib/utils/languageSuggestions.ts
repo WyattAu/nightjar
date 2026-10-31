@@ -27,7 +27,7 @@ export const suggestedLanguages = (): string[] => {
     : ["en"];
 };
 
-/** The Chinese characters Handy writes. */
+/** The Chinese characters Nightjar writes. */
 export type ChineseScriptChoice = "zh-Hans" | "zh-Hant" | "zh-HK";
 
 export const CHINESE_SCRIPTS: {

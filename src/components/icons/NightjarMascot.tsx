@@ -1,5 +1,5 @@
-/** Handy's mascot; the outline and face follow the theme (`mascot-line`). */
-const HandyMascot = ({ className = "" }: { className?: string }) => {
+/** Nightjar's mascot; the outline and face follow the theme (`mascot-line`). */
+const NightjarMascot = ({ className = "" }: { className?: string }) => {
   return (
     <svg
       viewBox="0 0 151 165"
@@ -44,4 +44,4 @@ const HandyMascot = ({ className = "" }: { className?: string }) => {
   );
 };
 
-export default HandyMascot;
+export default NightjarMascot;

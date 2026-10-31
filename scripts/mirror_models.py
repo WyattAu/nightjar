@@ -80,9 +80,9 @@ def make_s3():
 
 
 def offered_models(catalog):
-    """Mirror every root-level ASR default Handy can download, plus the
+    """Mirror every root-level ASR default Nightjar can download, plus the
     language detector the catalog names (catalog::LANGUAGE_DETECTOR), which
-    Handy fetches alongside models without their own language detection.
+    Nightjar fetches alongside models without their own language detection.
     Matches catalog::CatalogModel::is_offered (the models directory is flat)."""
     detector = catalog.get("languageDetector")
     for m in catalog["models"]:

@@ -7,12 +7,32 @@ Working name; confirm before first public release. R0 blocks any distribution.
 Upstream MIT covers the code; the Handy name, logo, and brand assets are
 explicitly excluded and forks must not imply endorsement.
 
-- [ ] Final name check (crates.io, npm, GitHub, USPTO quick pass)
-- [ ] Replace app name in tauri.conf identifier + product names, bundle
-      metadata, tray, about dialog
-- [ ] New icon set (generate, then hand-tune at 32/128/256/512)
-- [ ] Purge brand strings from docs; keep upstream attribution in NOTICE
-- [ ] Functional URLs (model blob hosts) stay; verify each still resolves
+- [x] Name check 2026-10-31: "nightjar" taken on crates.io + npm (irrelevant
+      for a desktop app; any future crate publishes as a suffixed name).
+      Repo name + product name Nightjar stand.
+- [x] tauri.conf: productName Nightjar, identifier com.wyattau.nightjar
+- [x] Cargo package/bin/lib renamed (nightjar, nightjar_app_lib; main.rs
+      imports updated); frontend `bun run build` green (tsc + vite)
+- [x] Icon set regenerated from assets/icon-source.svg (placeholder glyph,
+      rsvg-rendered; hand-tune pass still owed)
+- [x] Brand strings purged across src/, src-tauri/, nix/, scripts/, locales
+      (26 locale files), NSIS installer, CI workflow; attribution retained
+      in README/NOTICE/docs only
+- [x] Updater decoupled from upstream: createUpdaterArtifacts=false,
+      endpoints=[], upstream Windows Trusted Signing signCommand removed
+- [x] Functional model URLs verified resolving 2026-10-31 (both
+      blob.handy.computer model hosts: HTTP 200)
+- [ ] Icon hand-tune at 32/128/256/512 (placeholder is serviceable)
+- [ ] Linux build green on this host: BLOCKED on system deps, needs
+      `sudo pacman -S base-devel clang libevdev shaderc spirv-headers
+      glslang alsa-lib pkgconf openssl vulkan-devel` (BUILD.md's documented
+      line); cargo check currently stops at transcribe-cpp-sys → missing
+      SPIRV-Headers. Rename-compile safety otherwise verified: mixed-case
+      sweep clean outside attribution files, all handy_app_lib call sites
+      updated (5/5), internal handy_keys/HANDY_ identifiers intentionally
+      preserved (feature names, not brand).
+- [ ] Merge upstream CLAUDE.md guidance into AGENTS.md or docs/ (V2
+      discovers only AGENTS.md, so upstream's agent notes are inert)
 
 ## R1: Wayland-first text injection
 
