@@ -1483,6 +1483,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "dsp-core"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4132db3acddeabbedabfc40c0079472b73289a248e345b49e2c56b493a63a7a2"
+dependencies = [
+ "libm",
+]
+
+[[package]]
 name = "dtoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3584,6 +3593,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "clap",
+ "dsp-core",
  "earshot",
  "enigo",
  "env_filter",
@@ -3611,7 +3621,6 @@ dependencies = [
  "rubato",
  "rusqlite",
  "rusqlite_migration",
- "rustfft",
  "serde",
  "serde_json",
  "sha2",
