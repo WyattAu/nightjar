@@ -7,9 +7,9 @@ Working name; confirm before first public release. R0 blocks any distribution.
 Upstream MIT covers the code; the Handy name, logo, and brand assets are
 explicitly excluded and forks must not imply endorsement.
 
-- [x] Name check 2026-10-31: "nightjar" taken on crates.io + npm (irrelevant
-      for a desktop app; any future crate publishes as a suffixed name).
-      Repo name + product name Nightjar stand.
+- [x] Name check 2026-10-31 + confirmed final 2026-11-01: "nightjar" taken
+      on crates.io + npm (irrelevant for a desktop app; any future crate
+      publishes as a suffixed name). Repo name + product name Nightjar stand.
 - [x] tauri.conf: productName Nightjar, identifier com.wyattau.nightjar
 - [x] Cargo package/bin/lib renamed (nightjar, nightjar_app_lib; main.rs
       imports updated); frontend `bun run build` green (tsc + vite)

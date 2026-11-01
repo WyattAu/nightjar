@@ -25,7 +25,7 @@ known, documented pain, and to hold a harder engineering line:
 
 ## Status
 
-Seeded, pre-rebrand. See [docs/ROADMAP.md](docs/ROADMAP.md). R0 is mandatory
+Rebrand complete (2026-11-01). Nightjar is the confirmed name. See [docs/ROADMAP.md](docs/ROADMAP.md). R0 is mandatory
 before any distribution: upstream's MIT license covers the code, but the
 Handy name, logo, and brand assets do not, and upstream explicitly requires
 forks to rebrand.
