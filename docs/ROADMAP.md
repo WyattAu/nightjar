@@ -27,8 +27,13 @@ explicitly excluded and forks must not imply endorsement.
       workflow ci.yml `cargo check` job) with the full BUILD.md apt dep set;
       frontend tsc+vite green. Note for local builds: apt/ubuntu splits
       `glslc` into its own package (glslang-tools lacks it), and Arch needs
-      `spirv-headers` installed; alternatively clone KhronosGroup/SPIRV-Headers
-      and set CMAKE_PREFIX_PATH (no sudo). Rename-compile safety verified:
+      `spirv-headers` installed; no-sudo alternative (verified 2026-11-01;
+      a raw KhronosGroup/SPIRV-Headers clone is NOT enough — CMake needs a
+      generated config, so generate + install a prefix):
+        cmake -S ~/dev/src/github.com/KhronosGroup/SPIRV-Headers -B /tmp/spirv-build
+        cmake --install /tmp/spirv-build --prefix ~/dev/src/thirdparty/spirv-install
+        CMAKE_PREFIX_PATH=$HOME/dev/src/thirdparty/spirv-install cargo check
+      Rename-compile safety verified:
       mixed-case sweep clean outside attribution files, all handy_app_lib
       call sites updated (5/5), internal handy_keys/HANDY_ identifiers
       intentionally preserved (feature names, not brand).
