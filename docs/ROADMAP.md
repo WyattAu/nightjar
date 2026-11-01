@@ -27,7 +27,10 @@ explicitly excluded and forks must not imply endorsement.
       workflow ci.yml `cargo check` job) with the full BUILD.md apt dep set;
       frontend tsc+vite green. Note for local builds: apt/ubuntu splits
       `glslc` into its own package (glslang-tools lacks it), and Arch needs
-      `spirv-headers` installed; no-sudo alternative (verified 2026-11-01;
+      `spirv-headers` installed. Local Arch gap measured 2026-11-01 by
+      pkg-config sweep: ONLY `gtk-layer-shell` missing of the whole set
+      (`sudo pacman -S gtk-layer-shell`). No-sudo alternative (verified
+      2026-11-01;
       a raw KhronosGroup/SPIRV-Headers clone is NOT enough — CMake needs a
       generated config, so generate + install a prefix):
         cmake -S ~/dev/src/github.com/KhronosGroup/SPIRV-Headers -B /tmp/spirv-build
