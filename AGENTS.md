@@ -16,3 +16,5 @@ engineering-standards until this repo grows its own matrix (ROADMAP R4/R0).
 4. **Roadmap discipline.** docs/ROADMAP.md is the plan of record; a change
    that contradicts it gets an ROADMAP edit in the same commit.
 5. **Secrets:** key-file pattern per estate-keys skill; never committed.
+
+Upstream agent guidance: docs/UPSTREAM-CLAUDE.md (reference only; OpenCode V2 does not discover CLAUDE.md. Merge anything still true into AGENTS.md deliberately).
