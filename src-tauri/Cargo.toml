@@ -1,6 +1,6 @@
 [package]
 name = "nightjar"
-version = "0.9.8"
+version = "0.1.0"
 description = "Nightjar"
 authors = ["WyattAu"]
 edition = "2021"
