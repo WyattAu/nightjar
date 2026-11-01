@@ -23,16 +23,18 @@ explicitly excluded and forks must not imply endorsement.
 - [x] Functional model URLs verified resolving 2026-10-31 (both
       blob.handy.computer model hosts: HTTP 200)
 - [ ] Icon hand-tune at 32/128/256/512 (placeholder is serviceable)
-- [ ] Linux build green on this host: BLOCKED on system deps, needs
-      `sudo pacman -S base-devel clang libevdev shaderc spirv-headers
-    glslang alsa-lib pkgconf openssl vulkan-devel` (BUILD.md's documented
-      line); cargo check currently stops at transcribe-cpp-sys → missing
-      SPIRV-Headers. Rename-compile safety otherwise verified: mixed-case
-      sweep clean outside attribution files, all handy*app_lib call sites
-      updated (5/5), internal handy_keys/HANDY* identifiers intentionally
-      preserved (feature names, not brand).
-- [ ] Merge upstream CLAUDE.md guidance into AGENTS.md or docs/ (V2
-      discovers only AGENTS.md, so upstream's agent notes are inert)
+- [x] Linux build green: **CI-verified 2026-11-01** (ubuntu-24.04 runner,
+      workflow ci.yml `cargo check` job) with the full BUILD.md apt dep set;
+      frontend tsc+vite green. Note for local builds: apt/ubuntu splits
+      `glslc` into its own package (glslang-tools lacks it), and Arch needs
+      `spirv-headers` installed; alternatively clone KhronosGroup/SPIRV-Headers
+      and set CMAKE_PREFIX_PATH (no sudo). Rename-compile safety verified:
+      mixed-case sweep clean outside attribution files, all handy_app_lib
+      call sites updated (5/5), internal handy_keys/HANDY_ identifiers
+      intentionally preserved (feature names, not brand).
+- [x] Upstream CLAUDE.md relocated to docs/UPSTREAM-CLAUDE.md (2026-11-01;
+      V2 discovers only AGENTS.md, so it was inert). Content merge into
+      AGENTS.md deferred to R1.
 
 ## R1: Wayland-first text injection
 
