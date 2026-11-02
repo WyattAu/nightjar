@@ -23,7 +23,10 @@ explicitly excluded and forks must not imply endorsement.
 - [x] Functional model URLs verified resolving 2026-10-31 (both
       blob.handy.computer model hosts: HTTP 200)
 - [ ] Icon hand-tune at 32/128/256/512 (placeholder is serviceable)
-- [x] Linux build green: **CI-verified 2026-11-01** (ubuntu-24.04 runner,
+- [x] Linux build green locally too: **cargo check 0 errors on this box
+      2026-11-01** (KDE Wayland, no-sudo recipe: SPIRV generate+install
+      prefix + CPATH for the headers; 10m18s full tree). Plus
+      **CI-verified 2026-11-01** (ubuntu-24.04 runner,
       workflow ci.yml `cargo check` job) with the full BUILD.md apt dep set;
       frontend tsc+vite green. Note for local builds: apt/ubuntu splits
       `glslc` into its own package (glslang-tools lacks it), and Arch needs
