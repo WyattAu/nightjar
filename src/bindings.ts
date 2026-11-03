@@ -988,7 +988,7 @@ async cancelHistoryEntryTranscription(id: number) : Promise<void> {
 },
 /**
  * Adds an audio or video file to History and queues its transcription.
- * Fails without adding anything if the file has no audio Handy can read.
+ * Fails without adding anything if the file has no audio Nightjar can read.
  */
 async transcribeFile(path: string) : Promise<Result<HistoryEntry, string>> {
     try {
@@ -1015,10 +1015,8 @@ async updateRecordingRetentionPeriod(period: string) : Promise<Result<null, stri
 }
 },
 /**
- * Checks if the Mac is a laptop by detecting battery presence
- * 
- * This uses pmset to check for battery information.
- * Returns true if a battery is detected (laptop), false otherwise (desktop)
+ * Stub implementation for non-macOS platforms
+ * Always returns false since laptop detection is macOS-specific
  */
 async isLaptop() : Promise<Result<boolean, string>> {
     try {
@@ -1204,10 +1202,10 @@ export type KeyboardDiagnosticReport = { secure_input_enabled: boolean; culprit_
  * Counts only — key identity is deliberately never captured.
  */
 key_down: number; key_up: number; flags_changed: number; mouse: number; duration_ms: number }
-export type KeyboardImplementation = "tauri" | "handy_keys"
+export type KeyboardImplementation = "tauri" | "nightjar_keys"
 export type LLMPrompt = { id: string; name: string; prompt: string }
 /**
- * When Handy's spoken-language detector picks the language for Auto.
+ * When Nightjar's spoken-language detector picks the language for Auto.
  */
 export type LanguageDetectionMode = 
 /**
@@ -1233,11 +1231,11 @@ export type LanguageSource =
  */
 "model" | 
 /**
- * Handy's detector picked it.
+ * Nightjar's detector picked it.
  */
 "detected" | 
 /**
- * Handy had to pick without detecting (too little speech, detection
+ * Nightjar had to pick without detecting (too little speech, detection
  * failed or unavailable, or Auto can't work for these languages).
  */
 "fallback"
@@ -1252,11 +1250,11 @@ export type LanguageStatus =
  */
 { kind: "selected"; language: string } | 
 /**
- * Decided per transcription: the model's own detection, or Handy's.
+ * Decided per transcription: the model's own detection, or Nightjar's.
  */
 { kind: "auto" } | 
 /**
- * Auto needs Handy's detector, which isn't downloaded; `fallback` (the
+ * Auto needs Nightjar's detector, which isn't downloaded; `fallback` (the
  * first preferred language) is used until it is.
  */
 { kind: "detector_missing"; fallback: string } | 
@@ -1268,7 +1266,7 @@ export type LogLevel = "trace" | "debug" | "info" | "warn" | "error"
 export type ModelInfo = { id: string; name: string; description: string; filename: string; source: ModelSource; size_mb: number; is_downloaded: boolean; is_downloading: boolean; partial_size: number; accuracy_score: number; speed_score: number; supports_translation: boolean; is_recommended: boolean; supported_languages: string[]; supports_language_selection: boolean; is_custom: boolean; supports_streaming: boolean; supports_language_detection: boolean }
 export type ModelLoadStatus = { is_loaded: boolean; current_model: string | null }
 /**
- * Where a model comes from and how Handy obtains it — the routing discriminant
+ * Where a model comes from and how Nightjar obtains it — the routing discriminant
  * for downloading and on-disk resolution.
  */
 export type ModelSource = 
@@ -1431,7 +1429,7 @@ export type StreamTextEvent = { committed: string; tentative: string }
 export type StreamWorkKind = "transcribing" | "polishing"
 /**
  * UI appearance mode. `System` follows the OS `prefers-color-scheme`; `Light`
- * and `Dark` force one of the two palettes Handy already ships.
+ * and `Dark` force one of the two palettes Nightjar already ships.
  */
 export type Theme = "system" | "light" | "dark"
 export type TranscribeAcceleratorSetting = "auto" | "cpu" | "gpu"

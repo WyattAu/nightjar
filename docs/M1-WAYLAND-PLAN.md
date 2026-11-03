@@ -62,3 +62,14 @@ after at least one injection bug is fixed.
 Dictation → paste works into all five target apps on KDE Wayland and GNOME
 Wayland with no manual compositor tweaks, and the chosen tool is visible in
 Settings.
+
+## Smoke results (2026-11-02/03, KDE Wayland, wyattdeskacercachy)
+
+| # | Finding | Status |
+|---|---|---|
+| 1 | Dev-run launch fails: libtranscribe.so.0.4 + ggml libs off-path for tree builds | **RESOLVED**: scripts/dev-run.sh (LD_LIBRARY_PATH + backend symlinks + binary exec) |
+| 2 | transcribe_init_backends: no compute devices — ggml's variant-dispatch CPU modules land in out/build/bin/, one dir from the scan dir | **RESOLVED**: dev-run.sh symlinks them next to libtranscribe; engine initialized, CPU backend registered |
+| 3 | Vulkan backend deliberately off (upstream AMD hang #2340); CPU floor is the supported path | accepted; device list shows exactly [CPU (cpu)] |
+
+**Dictation voice tests now unblocked** — the protocol above runs against
+the live instance (relaunch via scripts/dev-run.sh after any rebuild).
