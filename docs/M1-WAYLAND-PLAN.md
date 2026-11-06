@@ -73,3 +73,20 @@ Settings.
 
 **Dictation voice tests now unblocked** — the protocol above runs against
 the live instance (relaunch via scripts/dev-run.sh after any rebuild).
+
+## Transcription engine verified on-box (2026-11-06)
+
+Headless batch transcription through the app's real path
+(`nightjar -f <16k-wav> --model ggml-tiny`):
+
+- CPU backend loads via variant dispatch (libggml-cpu-haswell.so picked on
+  the i5-9400F)
+- ggml-tiny (77 MB, HF ggerganov/whisper.cpp) discovered from the models dir
+  as a custom model — note: blob.handy.computer 404s for ggml-tiny; fetch
+  from HF ggerganov/whisper.cpp instead
+- Result: "The quick brown fox jump over the lazy dog." (5/6 words exact,
+  tiny-model quirk), RTF 0.22x — 4.5x faster than real time
+- Transcription engine: VERIFIED on the flagship box
+
+Remaining for M1: mic capture + injection with a human voice (user session),
+per the matrix above.
